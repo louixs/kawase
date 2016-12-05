@@ -17,7 +17,7 @@ clean #run cleaning
 #======#
 
 #function to scrape latest currency price on google finance 
-function scrapeGoogleCurr() {
+function scrapeCurr() {
   agent="Googlebot/2.1 (+http://www.google.com/bot.html)"
   currInput=$1
   currData=$(curl -sAL $agent http://finance.google.com/finance/info\?client\=ig\&q\=CURRENCY:$1 | grep '"l"' | awk '{print $3}' | tr -d ' " ')
@@ -29,9 +29,9 @@ function scrapeGoogleCurr() {
 }
 
 #using the function to obtain curr data from google
-usdjpy=$( scrapeGoogleCurr "USDJPY")
-eurjpy=$( scrapeGoogleCurr "EURJPY")
-gbpjpy=$( scrapeGoogleCurr "GBPJPY")
+usdjpy=$( scrapeCurr "USDJPY")
+eurjpy=$( scrapeCurr "EURJPY")
+gbpjpy=$( scrapeCurr "GBPJPY")
 
 currTime=$( date +%b" "%d" "%a" "%T )
 

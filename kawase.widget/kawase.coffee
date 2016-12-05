@@ -33,9 +33,6 @@ render: (output) -> """
 
 """
 
-# afterRender: (output, domEl) ->
-#   <div id="load">loading...</div>
-
 update:(output,domEl) ->
   @run """
     if [ ! -e kawase.sh ]; then
@@ -101,7 +98,7 @@ style: """
   // how to use font available in directory
   
   color: #7eFFFF
-  font-family: hack, Helvetica Neue
+  font-family: Melno regular, hack, Helvetica Neue
   font-weight: 100
   font-size: 15px
   top: 4%

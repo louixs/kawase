@@ -32,13 +32,14 @@ function scrapeCurr() {
 usdjpy=$( scrapeCurr "USDJPY")
 eurjpy=$( scrapeCurr "EURJPY")
 gbpjpy=$( scrapeCurr "GBPJPY")
+sgdjpy=$( scrapeCurr "SGDJPY")
 
 currTime=$( date +%b" "%d" "%a" "%T )
 
 #echo "$currTime"
-echo "USD/JPY $usdjpy,""EUR/JPY $eurjpy,""GBP/JPY $gbpjpy" >> kawase.db
+echo "USD/JPY $usdjpy,EUR/JPY $eurjpy,GBP/JPY $gbpjpy,SGD/JPY $sgdjpy" >> kawase.db
 
 latest=$(less kawase.db | tail -n1)
 previous=$(less kawase.db | tail -n2 | head -n1)
 
-echo $previous":"$latest
+echo "$previous:$latest"

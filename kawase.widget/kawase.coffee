@@ -6,31 +6,37 @@ command: """
   fi
 """
 
-#source $HOME/.b &> /dev/null && $HOME/Reference/C/coding/ubersicht/ubersicht.coffee
-
-# the refresh frequency in milliseconds
-# defaulting to a bit over 1 min.
-refreshFrequency: 100520
+# update frequency
+# lowest possible was a bit over 3 min. (300520)
+# google seem to block if you do this too frequently so be careful not to make this too often
+ 
+refreshFrequency: '10m'
 
 # render gets called after the shell command has executed. The command's output
 # is passed in as a string. Whatever it returns will get rendered as HTML.
 # <p>#{output}</p>
+  
 render: (output) -> """
-<table>
-  <tr>
-    <td>USD/JPY</td>
-    <td><div id="usdjpy">loading...</div></td>
-  </tr>
-  <tr>
-    <td>EUR/JPY</td>
-    <td><div id="eurjpy">loading...</div></td>
-  </tr>
-  <tr>
-    <td>GBP/JPY</td>
-    <td><div id="gbpjpy">loading...</div></td>
-  </tr>
-</table>
-
+<div id=kawase>
+  <table>
+    <tr>
+      <td>USD/JPY</td>
+      <td><div id="usdjpy">loading...</div></td>
+    </tr>
+    <tr>
+      <td>EUR/JPY</td>
+      <td><div id="eurjpy">loading...</div></td>
+    </tr>
+    <tr>
+      <td>GBP/JPY</td>
+      <td><div id="gbpjpy">loading...</div></td>
+    </tr>
+    <tr>
+      <td>SGD/JPY</td>
+      <td><div id="sgdjpy">loading...</div></td>
+    </tr>      
+  </table>
+</div>
 """
 
 update:(output,domEl) ->
@@ -41,13 +47,15 @@ update:(output,domEl) ->
       "$PWD/kawase.sh"
     fi
   """, (err, output) ->
+      show=(x)-> console.log x
+
       extract_num =(x)-> parseFloat(x.split(" ")[1])
       #get_parse_curr=(arr,pos)-> extract_num(arr.split(",")[pos])
-        
+      
       data=output.split(":");
       previous=data[0].split(",")      
       latest=data[1].split(",")
-
+      
       # both arrays currency are in the order of
       # USDJPY, EURJPY, GBPJPY
       latest_num = (extract_num(num) for num in latest)
@@ -58,7 +66,7 @@ update:(output,domEl) ->
       # ==== function to conditionally alter DOM and populate value
       
       compare=(latest,previous,id,content)->
-        default_colour="#7eFFFF"
+        default_colour="#6fc3df"
         
         set_colour = (colour) ->
           $(domEl).find(id).text(content).css('color',colour)
@@ -86,6 +94,7 @@ update:(output,domEl) ->
       compare(latest_num[0],previous_num[0],"#usdjpy",latest_num[0])
       compare(latest_num[1],previous_num[1],"#eurjpy",latest_num[1])
       compare(latest_num[2],previous_num[2],"#gbpjpy",latest_num[2])
+      compare(latest_num[3],previous_num[3],"#sgdjpy",latest_num[3])      
       # =============================
 
       #time= (new Date).getTime();
@@ -97,7 +106,7 @@ style: """
   // https://css-tricks.com/snippets/css/using-font-face/
   // how to use font available in directory
   
-  color: #7eFFFF
+  color: #6fc3df
   font-family: Melno regular, hack, Helvetica Neue
   font-weight: 100
   font-size: 15px
@@ -109,7 +118,7 @@ style: """
     border-spacing: 3px
     
   table td, table th 
-    border: 1px solid #7eFFFF
+    border: 1px solid #6fc3df
     //#E6E6E6
     
   table tr:first-child td 

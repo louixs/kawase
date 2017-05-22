@@ -2,12 +2,14 @@
 
 cd kawase.widget
 
+database=assets/kawase.db
+
 function clean(){
-  if [ -a kawase.db ]; then
-    db_file_size=$(ls -l kawase.db | awk '{print $5}')
+  if [ -a $database ]; then
+    db_file_size=$(ls -l $database | awk '{print $5}')
     #if the curr.db file size is bigger than 20 Mb, remove
     if (("$db_file_size" > "20000000")); then
-      rm kawase.db
+      rm $database
     fi
   fi
 }
@@ -37,9 +39,9 @@ sgdjpy=$( scrapeCurr "SGDJPY")
 currTime=$( date +%b" "%d" "%a" "%T )
 
 #echo "$currTime"
-echo "datetime $currTime,USD/JPY $usdjpy,EUR/JPY $eurjpy,GBP/JPY $gbpjpy,SGD/JPY $sgdjpy" >> assets/kawase.db
+echo "datetime $currTime,USD/JPY $usdjpy,EUR/JPY $eurjpy,GBP/JPY $gbpjpy,SGD/JPY $sgdjpy" >> $database
 
-last_two=$(cat kawase.db | tail -n2)
+last_two=$(cat $database | tail -n2)
 previous=$(echo $last_two | head -n1)
 latest=$(echo $last_two | tail -n1)
 

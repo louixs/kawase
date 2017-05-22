@@ -21,19 +21,19 @@ render: (output) -> """
   <table>
     <tr>
       <td>USD/JPY</td>
-      <td><div id="usdjpy">loading...</div></td>
+      <td><div id="usdjpy"><img src="kawase.widget/assets/loading.gif" alt="loading..." height="20" width="20"></div></td>
     </tr>
     <tr>
       <td>EUR/JPY</td>
-      <td><div id="eurjpy">loading...</div></td>
+      <td><div id="eurjpy"><img src="kawase.widget/assets/loading.gif" alt="loading..." height="20" width="20"></div></td>
     </tr>
     <tr>
       <td>GBP/JPY</td>
-      <td><div id="gbpjpy">loading...</div></td>
+      <td><div id="gbpjpy"><img src="kawase.widget/assets/loading.gif" alt="loading..." height="20" width="20"></div></td>
     </tr>
     <tr>
       <td>SGD/JPY</td>
-      <td><div id="sgdjpy">loading...</div></td>
+      <td><div id="sgdjpy"><img src="kawase.widget/assets/loading.gif" alt="loading..." height="20" width="20"></div></td>
     </tr>      
   </table>
 </div>
@@ -52,20 +52,30 @@ update:(output,domEl) ->
       extract_num =(x)-> parseFloat(x.split(" ")[1])
       #get_parse_curr=(arr,pos)-> extract_num(arr.split(",")[pos])
       
-      data=output.split(":");
+      data=output.split(";");
+      datetime=data[0].split(",")
       previous=data[0].split(",")      
       latest=data[1].split(",")
+
+      # datetime
+      previous_datetime = previous[0]
+      latest_datetime = latest[0]
+    
+      # currency data
+      # getting rid of datetime
+      previous.splice(0,1)
+      latest.splice(0,1)
+      previous_curr = previous
+      latest_curr = latest
       
       # both arrays currency are in the order of
       # USDJPY, EURJPY, GBPJPY
-      latest_num = (extract_num(num) for num in latest)
-      previous_num = (extract_num(num) for num in previous)
-      #console.log(latest_num)
+      latest_num = (extract_num(num) for num in latest_curr)
+      previous_num = (extract_num(num) for num in previous_curr)
 
       # ==========================
-      # ==== function to conditionally alter DOM and populate value
-      
-      compare=(latest,previous,id,content)->
+      # ==== function to conditionally alter DOM and populate value      
+      compare=(latest_curr,previous_curr,id,content)->
         default_colour="#6fc3df"
         
         set_colour = (colour) ->
@@ -75,16 +85,16 @@ update:(output,domEl) ->
         # http://stackoverflow.com/questions/5600351/javascript-change-css-color-for-5-seconds
         # https://evanhahn.com/smoothing-out-settimeout-in-coffeescript/
         run_delayed_set = (colour) ->
-          setTimeout (-> set_colour(colour)), 50
-          setTimeout (-> set_colour(default_colour)), 7000
+          setTimeout (-> set_colour(colour)), 200
+          setTimeout (-> set_colour(default_colour)), 1000
            
-        if latest < previous
+        if latest_curr < previous_curr
           #$(domEl).find(id).text(content).css('color','red')
           run_delayed_set('red')
           #setTimeout($(domEl).find(id).text(content).css('color',default_colour), 5000)
           #console.log("set colour ran")
           #run_delayed_set()          
-        else if latest > previous
+        else if latest_curr > previous_curr
           run_delayed_set('green')
         else
           $(domEl).find(id).text(content)
@@ -110,8 +120,8 @@ style: """
   font-family: Melno regular, hack, Helvetica Neue
   font-weight: 100
   font-size: 15px
-  top: 4%
-  left: 2%
+  top: 1%
+  left: 1%
 
   table
     border-collapse: collapse

@@ -37,9 +37,11 @@ sgdjpy=$( scrapeCurr "SGDJPY")
 currTime=$( date +%b" "%d" "%a" "%T )
 
 #echo "$currTime"
-echo "USD/JPY $usdjpy,EUR/JPY $eurjpy,GBP/JPY $gbpjpy,SGD/JPY $sgdjpy" >> kawase.db
+echo "datetime $currTime,USD/JPY $usdjpy,EUR/JPY $eurjpy,GBP/JPY $gbpjpy,SGD/JPY $sgdjpy" >> assets/kawase.db
 
-latest=$(less kawase.db | tail -n1)
-previous=$(less kawase.db | tail -n2 | head -n1)
+last_two=$(cat kawase.db | tail -n2)
+previous=$(echo $last_two | head -n1)
+latest=$(echo $last_two | tail -n1)
 
-echo "$previous:$latest"
+
+echo "$previous;$latest"

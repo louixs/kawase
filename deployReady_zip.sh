@@ -11,10 +11,10 @@ function fileExists(){
 
 folder=$1
 
-rm "$folder"/assets/*.db
-echo ".db files removed"
-rm -r "$folder"/assets/log
-echo "log files removed"
+#rm "$folder"/assets/*.db
+#echo ".db files removed"
+#rm -r "$folder"/assets/log
+#echo "log files removed"
 
 if fileExists "$folder".zip; then
   rm "$folder".zip

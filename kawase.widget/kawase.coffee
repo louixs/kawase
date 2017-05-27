@@ -10,7 +10,7 @@ command: """
 # lowest possible was a bit over 3 min. (300520)
 # google seem to block if you do this too frequently so be careful not to make this too often
  
-refreshFrequency: '10m'
+refreshFrequency: '3m'
 
 # render gets called after the shell command has executed. The command's output
 # is passed in as a string. Whatever it returns will get rendered as HTML.
